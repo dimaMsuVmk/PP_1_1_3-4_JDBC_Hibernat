@@ -23,9 +23,5 @@ public class Main {
             System.out.println(u);
         }
         //daoJDBC.cleanUsersTable();
-
-        //Как закрывать соединение?
-        //Добавил в интерфейсы UserService и UserDao метод "void closeConnection()"
-        userService.closeConnection();
     }
 }

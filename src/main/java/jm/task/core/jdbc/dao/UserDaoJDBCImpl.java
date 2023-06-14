@@ -106,14 +106,4 @@ public class UserDaoJDBCImpl implements UserDao {
             throw new RuntimeException(e);
         }
     }
-
-    @Override
-    public void closeConnection() {
-        try {
-            connection.close();
-        } catch (SQLException e) {
-            System.out.println("Ошибка закрытия соединения ...");
-            throw new RuntimeException(e);
-        }
-    }
 }

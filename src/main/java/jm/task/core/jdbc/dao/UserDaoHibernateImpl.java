@@ -37,8 +37,4 @@ public class UserDaoHibernateImpl implements UserDao {
     public void cleanUsersTable() {
 
     }
-
-    public void closeConnection() {
-
-    }
 }
