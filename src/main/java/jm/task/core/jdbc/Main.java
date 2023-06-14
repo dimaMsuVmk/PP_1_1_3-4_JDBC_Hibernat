@@ -1,25 +1,31 @@
 package jm.task.core.jdbc;
 
+import jm.task.core.jdbc.dao.UserDao;
 import jm.task.core.jdbc.dao.UserDaoJDBCImpl;
 import jm.task.core.jdbc.model.User;
+import jm.task.core.jdbc.service.UserService;
+import jm.task.core.jdbc.service.UserServiceImpl;
 
 public class Main {
     public static void main(String[] args) {
-        UserDaoJDBCImpl daoJDBC = new UserDaoJDBCImpl();
-        daoJDBC.dropUsersTable();
-        daoJDBC.createUsersTable();
-        daoJDBC.saveUser("Dima", "Popov", Byte.valueOf("9"));
-        daoJDBC.saveUser("Dima", "Ivanov", Byte.valueOf("12"));
-        daoJDBC.saveUser("Oleg", "Kolov", Byte.valueOf("19"));
-        for (User u : daoJDBC.getAllUsers()) {
+        UserService userService = new UserServiceImpl();
+        userService.dropUsersTable();
+        userService.createUsersTable();
+        userService.saveUser("Dima", "Popov", Byte.valueOf("9"));
+        userService.saveUser("Dima", "Ivanov", Byte.valueOf("12"));
+        userService.saveUser("Oleg", "Kolov", Byte.valueOf("19"));
+        for (User u : userService.getAllUsers()) {
             System.out.println(u);
         }
-        daoJDBC.removeUserById(2);
+        userService.removeUserById(2);
         System.out.println("Users after remove with id = 2");
-        for (User u : daoJDBC.getAllUsers()) {
+        for (User u : userService.getAllUsers()) {
             System.out.println(u);
         }
         //daoJDBC.cleanUsersTable();
 
+        //Как закрывать соединение?
+        //Добавил в интерфейсы UserService и UserDao метод "void closeConnection()"
+        userService.closeConnection();
     }
 }

@@ -8,28 +8,6 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Util {
-    // реализуйте настройку соеденения с БД
-    public static void main(String[] args) {
-//        Long id
-//        String name
-//        String lastName
-//        Byte age
-        String query = """
-                CREATE TABLE IF NOT EXISTS Users
-                (
-                    Id BIGINT PRIMARY KEY AUTO_INCREMENT,
-                    Name VARCHAR(30),
-                    LastName VARCHAR(30),
-                    Age TINYINT
-                )
-                """;
-        try(Connection connection = getConnection();
-            Statement statement = connection.createStatement()) {
-            statement.execute(query);
-        } catch (SQLException e) {
-            throw new RuntimeException(e);
-        }
-    }
     public static Connection getConnection() throws SQLException {
         String url = "jdbc:mysql://localhost:3306/katajdbc";
         String username = "root";
