@@ -22,6 +22,6 @@ public class Main {
         for (User u : userService.getAllUsers()) {
             System.out.println(u);
         }
-        //daoJDBC.cleanUsersTable();
+        userService.cleanUsersTable();
     }
 }
