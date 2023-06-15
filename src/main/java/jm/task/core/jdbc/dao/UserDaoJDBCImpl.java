@@ -18,13 +18,13 @@ public class UserDaoJDBCImpl implements UserDao {
             )
             """;
     private static final String SAVE_USER = """
-            INSERT INTO Users (Name, LastName, Age)
+            INSERT INTO users (Name, LastName, Age)
             VALUES (?, ?, ?);
             """;
-    private static final String DROP_USERS = "DROP TABLE IF EXISTS Users";
-    private static final String REMOVE_USER_BY_ID = "DELETE FROM Users WHERE ID = ?";
-    private static final String SELECT_USERS = "SELECT Id, Name, LastName, Age FROM Users";
-    private static final String DELETE = "DELETE FROM Users";
+    private static final String DROP_USERS = "DROP TABLE IF EXISTS users";
+    private static final String REMOVE_USER_BY_ID = "DELETE FROM users WHERE ID = ?";
+    private static final String SELECT_USERS = "SELECT Id, Name, LastName, Age FROM users";
+    private static final String DELETE = "DELETE FROM users";
 
     private Connection connection = null;
 
