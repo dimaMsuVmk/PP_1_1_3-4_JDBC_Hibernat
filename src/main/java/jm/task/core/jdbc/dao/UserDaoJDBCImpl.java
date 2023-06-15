@@ -3,10 +3,7 @@ package jm.task.core.jdbc.dao;
 import jm.task.core.jdbc.model.User;
 import jm.task.core.jdbc.util.Util;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,19 +29,14 @@ public class UserDaoJDBCImpl implements UserDao {
     private Connection connection = null;
 
     public UserDaoJDBCImpl() {
-        try{
             connection = Util.getConnection();
-        } catch (SQLException e) {
-            System.out.println("Ошибка получения соединения ...");
-            throw new RuntimeException(e);
-        }
     }
 
 
     @Override
     public void createUsersTable() {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(CREATE_USERS)) {
-            preparedStatement.executeUpdate();
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(CREATE_USERS);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }
@@ -52,8 +44,8 @@ public class UserDaoJDBCImpl implements UserDao {
 
     @Override
     public void dropUsersTable() {
-        try (PreparedStatement preparedStatement = connection.prepareStatement(DROP_USERS)) {
-            preparedStatement.executeUpdate();
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(DROP_USERS);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

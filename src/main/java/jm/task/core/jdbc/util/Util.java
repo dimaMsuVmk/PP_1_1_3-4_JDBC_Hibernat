@@ -8,12 +8,15 @@ import java.sql.SQLException;
 import java.sql.Statement;
 
 public class Util {
-    public static Connection getConnection() throws SQLException {
-        String url = "jdbc:mysql://localhost:3306/katajdbc";
-        String username = "root";
-        String password = "root";
-        //Class.forName("com.mysql.cj.jdbc.Driver").getDeclaredConstructor().newInstance();
-        return DriverManager.getConnection(url, username, password);
+    private static final String url = "jdbc:mysql://localhost:3306/katajdbc";
+    private static final String username = "root";
+    private static final String password = "root";
+    public static Connection getConnection(){
+        try {
+            return DriverManager.getConnection(url, username, password);
+        } catch (SQLException e) {
+            throw new RuntimeException(e);
+        }
     }
 }
 
