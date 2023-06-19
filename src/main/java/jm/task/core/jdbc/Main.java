@@ -7,6 +7,9 @@ import jm.task.core.jdbc.service.UserService;
 import jm.task.core.jdbc.service.UserServiceImpl;
 
 public class Main {
+    private static int foo(){
+        throw new NullPointerException();
+    }
     public static void main(String[] args) {
         UserService userService = new UserServiceImpl();
         userService.dropUsersTable();

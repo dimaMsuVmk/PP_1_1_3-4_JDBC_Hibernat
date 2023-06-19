@@ -25,11 +25,12 @@ public class UserDaoHibernateImpl implements UserDao {
             "lastName VARCHAR(50) NOT NULL," +
             "age TINYINT NOT NULL" +
             ")";
+
     public UserDaoHibernateImpl() {
     }
 
     public void createUsersTable() {
-        try(Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = Util.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             session.createSQLQuery(CREATE).executeUpdate();
             transaction.commit();
@@ -37,7 +38,7 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try(Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = Util.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
             session.createSQLQuery(DROP_USERS).executeUpdate();
             transaction.commit();
@@ -46,58 +47,65 @@ public class UserDaoHibernateImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         Transaction transaction = null;
-        try(Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
             transaction.commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
                 System.out.println("error in sql query");
             }
-            System.out.println("error initializing: transaction == null OR session == null");
+            System.out.println("error initializing: transaction == null");
         }
     }
 
     public void removeUserById(long id) {
         Transaction transaction = null;
-        try(Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = Util.getSessionFactory().openSession()) {
             transaction = session.beginTransaction();
             session.createQuery(REMOVE_USER_BY_ID)
                     .setParameter("id", id)
                     .executeUpdate();
             transaction.commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
                 System.out.println("error in sql query");
             }
-            System.out.println("error initializing: transaction == null OR session == null");
+            System.out.println("error initializing: transaction == null");
         }
     }
 
     public List<User> getAllUsers() {
         List<User> list = null;
-        try(Session session = Util.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+        Transaction transaction = null;
+        try (Session session = Util.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
             list = session.createSQLQuery(SELECT_USERS).addEntity(User.class).list();
             transaction.commit();
+        } catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+                System.out.println("error in sql query");
+            }
+            System.out.println("error initializing: transaction == null");
         }
         return list;
     }
 
     public void cleanUsersTable() {
         Transaction transaction = null;
-        try(Session session = Util.getSessionFactory().openSession()) {
-             transaction = session.beginTransaction();
+        try (Session session = Util.getSessionFactory().openSession()) {
+            transaction = session.beginTransaction();
             session.createSQLQuery(DELETE).executeUpdate();
             transaction.commit();
-        }catch (Exception e) {
+        } catch (Exception e) {
             if (transaction != null) {
                 transaction.rollback();
                 System.out.println("error in sql query");
             }
-            System.out.println("error initializing: transaction == null OR session == null");
+            System.out.println("error initializing: transaction == null");
         }
     }
 }
