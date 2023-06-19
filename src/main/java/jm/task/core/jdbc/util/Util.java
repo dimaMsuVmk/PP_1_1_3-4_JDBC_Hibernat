@@ -10,20 +10,20 @@ import java.sql.SQLException;
 import java.util.Properties;
 
 public class Util {
-    private static final String url = "jdbc:mysql://localhost:3306/katajdbc";
-    private static final String username = "root";
-    private static final String password = "root";
-    private static final String driverName = "com.mysql.jdbc.Driver";
+    private static final String URL = "jdbc:mysql://localhost:3306/katajdbc";
+    private static final String USERNAME = "root";
+    private static final String PASSWORD = "root";
+    private static final String DRIVER_NAME = "com.mysql.jdbc.Driver";
 
     public static void main(String[] args) {
 
     }
     public static SessionFactory getSessionFactory() {
         Properties properties = new Properties();
-        properties.put(Environment.DRIVER, driverName);
-        properties.put(Environment.URL, url);
-        properties.put(Environment.USER, username);
-        properties.put(Environment.PASS, password);
+        properties.put(Environment.DRIVER, DRIVER_NAME);
+        properties.put(Environment.URL, URL);
+        properties.put(Environment.USER, USERNAME);
+        properties.put(Environment.PASS, PASSWORD);
         properties.put(Environment.DIALECT,"org.hibernate.dialect.MySQLDialect");
         properties.put(Environment.SHOW_SQL, "true");
         properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
@@ -34,7 +34,7 @@ public class Util {
     }
     public static Connection getConnection() {
         try {
-            return DriverManager.getConnection(url, username, password);
+            return DriverManager.getConnection(URL, USERNAME, PASSWORD);
         } catch (SQLException e) {
             throw new RuntimeException(e);
         }

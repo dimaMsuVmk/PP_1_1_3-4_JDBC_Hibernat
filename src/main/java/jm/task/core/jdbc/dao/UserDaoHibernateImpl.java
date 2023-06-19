@@ -16,7 +16,7 @@ import java.util.List;
 
 public class UserDaoHibernateImpl implements UserDao {
     private static final String DROP_USERS = "DROP TABLE IF EXISTS users";
-    private static final String REMOVE_USER_BY_ID = "DELETE FROM users WHERE ID = ?";
+    private static final String REMOVE_USER_BY_ID = "DELETE FROM User u WHERE u.id=:id";
     private static final String SELECT_USERS = "SELECT * FROM users";
     private static final String DELETE = "DELETE FROM users";
     private static final String CREATE = "CREATE TABLE IF NOT EXISTS users (" +
@@ -31,8 +31,7 @@ public class UserDaoHibernateImpl implements UserDao {
     public void createUsersTable() {
         try(Session session = Util.getSessionFactory().openSession()) {
             Transaction transaction = session.beginTransaction();
-            Query query = session.createSQLQuery(CREATE);
-            query.executeUpdate();
+            session.createSQLQuery(CREATE).executeUpdate();
             transaction.commit();
         }
     }
@@ -46,20 +45,34 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     public void saveUser(String name, String lastName, byte age) {
+        Transaction transaction = null;
         try(Session session = Util.getSessionFactory().openSession()) {
-            Transaction t = session.beginTransaction();
+            transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
-            t.commit();
+            transaction.commit();
+        }catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+                System.out.println("error in sql query");
+            }
+            System.out.println("error initializing: transaction == null OR session == null");
         }
     }
 
     public void removeUserById(long id) {
+        Transaction transaction = null;
         try(Session session = Util.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
-            session.createQuery("delete from User u where u.id=:id")
+            transaction = session.beginTransaction();
+            session.createQuery(REMOVE_USER_BY_ID)
                     .setParameter("id", id)
                     .executeUpdate();
             transaction.commit();
+        }catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+                System.out.println("error in sql query");
+            }
+            System.out.println("error initializing: transaction == null OR session == null");
         }
     }
 
@@ -74,10 +87,17 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     public void cleanUsersTable() {
+        Transaction transaction = null;
         try(Session session = Util.getSessionFactory().openSession()) {
-            Transaction transaction = session.beginTransaction();
+             transaction = session.beginTransaction();
             session.createSQLQuery(DELETE).executeUpdate();
             transaction.commit();
+        }catch (Exception e) {
+            if (transaction != null) {
+                transaction.rollback();
+                System.out.println("error in sql query");
+            }
+            System.out.println("error initializing: transaction == null OR session == null");
         }
     }
 }
