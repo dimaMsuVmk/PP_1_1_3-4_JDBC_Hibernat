@@ -18,6 +18,9 @@ public class Util {
     private static SessionFactory sessionFactory = null;
 
     public static SessionFactory getSessionFactory() {
+        if(sessionFactory != null) {
+            return sessionFactory;
+        }
         Properties properties = new Properties();
         properties.put(Environment.DRIVER, DRIVER_NAME);
         properties.put(Environment.URL, URL);
@@ -26,12 +29,10 @@ public class Util {
         properties.put(Environment.DIALECT, "org.hibernate.dialect.MySQLDialect");
         properties.put(Environment.SHOW_SQL, "true");
         properties.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-        if (sessionFactory == null) {
-            sessionFactory = new Configuration()
+        sessionFactory = new Configuration()
                     .setProperties(properties)
                     .addAnnotatedClass(User.class)
                     .buildSessionFactory();
-        }
         return sessionFactory;
     }
 
