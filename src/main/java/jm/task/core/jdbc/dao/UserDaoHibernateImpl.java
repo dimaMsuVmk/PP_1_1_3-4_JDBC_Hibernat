@@ -25,12 +25,13 @@ public class UserDaoHibernateImpl implements UserDao {
             "lastName VARCHAR(50) NOT NULL," +
             "age TINYINT NOT NULL" +
             ")";
+    private static final SessionFactory sessionFactory = Util.getSessionFactory();
 
     public UserDaoHibernateImpl() {
     }
 
     public void createUsersTable() {
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.createSQLQuery(CREATE).executeUpdate();
             transaction.commit();
@@ -38,7 +39,7 @@ public class UserDaoHibernateImpl implements UserDao {
     }
 
     public void dropUsersTable() {
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             Transaction transaction = session.beginTransaction();
             session.createSQLQuery(DROP_USERS).executeUpdate();
             transaction.commit();
@@ -47,7 +48,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     public void saveUser(String name, String lastName, byte age) {
         Transaction transaction = null;
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.save(new User(name, lastName, age));
             transaction.commit();
@@ -62,7 +63,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     public void removeUserById(long id) {
         Transaction transaction = null;
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.createQuery(REMOVE_USER_BY_ID)
                     .setParameter("id", id)
@@ -80,9 +81,9 @@ public class UserDaoHibernateImpl implements UserDao {
     public List<User> getAllUsers() {
         List<User> list = null;
         Transaction transaction = null;
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
-            list = session.createSQLQuery(SELECT_USERS).addEntity(User.class).list();
+            list = session.createNativeQuery(SELECT_USERS, User.class).list();
             transaction.commit();
         } catch (Exception e) {
             if (transaction != null) {
@@ -96,7 +97,7 @@ public class UserDaoHibernateImpl implements UserDao {
 
     public void cleanUsersTable() {
         Transaction transaction = null;
-        try (Session session = Util.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
             session.createSQLQuery(DELETE).executeUpdate();
             transaction.commit();
